@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zsm.phoenix.dao.LawsRegulationsDao">
+<resultMap id="LawsRegulationsResultMap" type="com.zsm.phoenix.model.LawsRegulations">
+    <id column="id" jdbcType="VARCHAR" property="id"/>
+    <result column="TITLE" jdbcType="VARCHAR" property="TITLE"/>
+    <result column="RELEASE_DATE" jdbcType="VARCHAR" property="RELEASE_DATE"/>
+    <result column="EFFECTIVE_DATE" jdbcType="VARCHAR" property="EFFECTIVE_DATE"/>
+    <result column="RELEASE_BY" jdbcType="VARCHAR" property="RELEASE_BY"/>
+    <result column="AREA_NAME" jdbcType="VARCHAR" property="AREA_NAME"/>
+    <result column="CREATE_TIME" jdbcType="VARCHAR" property="CREATE_TIME"/>
+    <result column="LAST_MODIFIED_TIME" jdbcType="VARCHAR" property="LAST_MODIFIED_TIME"/>
+    <result column="CHAPTER_DESC" jdbcType="VARCHAR" property="CHAPTER_DESC"/>
+    <result column="KNOB_DESC" jdbcType="VARCHAR" property="KNOB_DESC"/>
+    <result column="ITEM_DESC" jdbcType="VARCHAR" property="ITEM_DESC"/>
+    <result column="LAW_CONTENT" jdbcType="VARCHAR" property="LAW_CONTENT"/>
+</resultMap>
+<select id="findLawChapter" parameterType="java.lang.String" resultMap="LawsRegulationsResultMap">
+       select
+         *
+       from standard_cloud_law_item_chapter as chapter,standard_cloud_law_item_chapter_item as item
+       where chapter.id=item.ITEM_CHAPTER_ID
+       <if test="null != _parameter ">
+           and chapter.TITLE like "%"#{_parameter}"%"
+       </if>
+      LIMIT 20;
+</select>
+</mapper>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zsm.phoenix.dao.EnterpriseProductDao">
+    <resultMap id="BaseResultMap" type="com.zsm.phoenix.model.EnterpriseProduct">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="productname" jdbcType="VARCHAR" property="productname"/>
+        <result column="metaname" jdbcType="VARCHAR" property="metaname"/>
+        <result column="businessname" jdbcType="VARCHAR" property="businessname"/>
+        <result column="categoryname3" jdbcType="VARCHAR" property="categoryname3"/>
+        <result column="categoryname12" jdbcType="VARCHAR" property="categoryname12"/>
+        <result column="categorycode" jdbcType="VARCHAR" property="categorycode"/>
+        <result column="barcode" jdbcType="VARCHAR" property="barcode"/>
+        <result column="unit_id" jdbcType="VARCHAR" property="unit_id"/>
+        <result column="expiration_date" jdbcType="VARCHAR" property="expiration_date"/>
+        <result column="format" jdbcType="VARCHAR" property="format"/>
+        <result column="characteristic" jdbcType="VARCHAR" property="characteristic"/>
+        <result column="regularity" jdbcType="VARCHAR" property="regularity"/>
+        <result column="business_brand_id" jdbcType="VARCHAR" property="business_brand_id"/>
+        <result column="category_id" jdbcType="VARCHAR" property="category_id"/>
+    </resultMap>
+
+    <select id="findByBarcode" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT tb1.id, tb1.name as productname, tb1.barcode, tb1.UNIT_ID, tb1.expiration_date, tb1.format,
+        tb1.characteristic, tb1.regularity,
+        tb1.business_brand_id, tb1.category_id,tb2.name as metaname,tb3.name as businessname,
+        tb6.categoryname3 as categoryname3,tb6.categoryname12 as categoryname12
+        FROM fsn_cloud_product as tb1
+        LEFT JOIN fsn_cloud_business_unit as tb2 ON tb1.UNIT_ID=tb2.id
+        LEFT JOIN fsn_cloud_business_brand as tb3 ON tb1.business_brand_id=tb3.id
+        LEFT JOIN
+        (SELECT tb4.id as id,tb4.name as categoryname3,tb5.name as categoryname12
+        FROM fsn_cloud_product_category_info as tb4,fsn_cloud_product_category as tb5
+        WHERE tb4.category_id=tb5.id) as tb6 ON tb1.category_id=tb6.id
+        <if test="_parameter != null">
+            WHERE barcode = #{code,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <select id="findByName" resultMap="BaseResultMap">
+        SELECT tb1.id, tb1.name as productname, tb1.barcode, tb1.UNIT_ID, tb1.expiration_date, tb1.format,
+        tb1.characteristic, tb1.regularity,
+        tb1.business_brand_id, tb1.category_id,tb2.name as metaname,tb3.name as businessname,
+        tb6.categoryname3 as categoryname3,tb6.categoryname12 as categoryname12
+        FROM fsn_cloud_product as tb1
+        LEFT JOIN fsn_cloud_business_unit as tb2 ON tb1.UNIT_ID=tb2.id
+        LEFT JOIN fsn_cloud_business_brand as tb3 ON tb1.business_brand_id=tb3.id
+        LEFT JOIN
+        (SELECT tb4.id as id,tb4.name as categoryname3,tb5.name as categoryname12
+        FROM fsn_cloud_product_category_info as tb4,fsn_cloud_product_category as tb5
+        WHERE tb4.category_id=tb5.id) as tb6 ON tb1.category_id=tb6.id
+        <if test="_parameter.name  != null and _parameter.name !=''">
+            WHERE tb1.name LIKE "%"#{name}"%"
+        </if>
+        <if test=" null != offset and null != limit">
+            LIMIT ${offset},${limit};
+        </if>
+    </select>
+</mapper>

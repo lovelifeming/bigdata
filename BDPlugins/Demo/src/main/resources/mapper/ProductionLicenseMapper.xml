@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zsm.phoenix.dao.ProductionLicenseDao">
+    <resultMap id="ProductionCertificateResultMap" type="com.zsm.phoenix.model.ProductionLicense">
+        <id column="ID" jdbcType="BIGINT" property="ID"/>
+        <result column="SCZMC" jdbcType="VARCHAR" property="SCZMC"/>
+        <result column="SCXKZBH" jdbcType="VARCHAR" property="SCXKZBH"/>
+        <result column="SHXYDM" jdbcType="VARCHAR" property="SHXYDM"/>
+        <result column="RCJDGLJG" jdbcType="VARCHAR" property="RCJDGLJG"/>
+        <result column="FDDBR" jdbcType="VARCHAR" property="FDDBR"/>
+        <result column="ZS" jdbcType="VARCHAR" property="ZS"/>
+        <result column="RCJDGLRY" jdbcType="VARCHAR" property="RCJDGLRY"/>
+        <result column="SCDZ" jdbcType="VARCHAR" property="SCDZ"/>
+        <result column="FZJG" jdbcType="VARCHAR" property="FZJG"/>
+        <result column="fzjgbm" jdbcType="VARCHAR" property="fzjgbm"/>
+        <result column="SPFL" jdbcType="VARCHAR" property="SPFL"/>
+        <result column="QFR" jdbcType="VARCHAR" property="QFR"/>
+        <result column="SSGJBH" jdbcType="VARCHAR" property="SSGJBH"/>
+        <result column="FZRQ" jdbcType="DATE" property="FZRQ"/>
+        <result column="YXQZ" jdbcType="DATE" property="YXQZ"/>
+        <result column="WSCKDZ" jdbcType="VARCHAR" property="WSCKDZ"/>
+        <result column="SPTJJLB" jdbcType="VARCHAR" property="SPTJJLB"/>
+        <result column="LBBH" jdbcType="VARCHAR" property="LBBH"/>
+        <result column="LBMC" jdbcType="VARCHAR" property="LBMC"/>
+        <result column="PZMX" jdbcType="VARCHAR" property="PZMX"/>
+    </resultMap>
+    <resultMap id="OperatorsInfoResultMap" type="com.zsm.phoenix.model.OperatorsInfo">
+        <result column="ID" jdbcType="BIGINT" property="ID"/>
+        <result column="JYZMC" jdbcType="VARCHAR" property="JYZMC"/>
+        <result column="SHXYDMZJHM" jdbcType="VARCHAR" property="SHXYDMZJHM"/>
+        <result column="JJXZ" jdbcType="VARCHAR" property="JJXZ"/>
+        <result column="ZS" jdbcType="VARCHAR" property="ZS"/>
+        <result column="JYCS" jdbcType="VARCHAR" property="JYCS"/>
+        <result column="CKDZ" jdbcType="VARCHAR" property="CKDZ"/>
+        <result column="XKZBH" jdbcType="VARCHAR" property="XKZBH"/>
+        <result column="ZTYT" jdbcType="VARCHAR" property="ZTYT"/>
+        <result column="JYXM" jdbcType="VARCHAR" property="JYXM"/>
+        <result column="RCJDGLJG" jdbcType="VARCHAR" property="RCJDGLJG"/>
+        <result column="RCJDGLRY" jdbcType="VARCHAR" property="RCJDGLRY"/>
+        <result column="YXQZ" jdbcType="VARCHAR" property="YXQZ"/>
+        <result column="FZJG" jdbcType="VARCHAR" property="FZJG"/>
+        <result column="ZGRS" jdbcType="VARCHAR" property="ZGRS"/>
+        <result column="YJBM" jdbcType="VARCHAR" property="YJBM"/>
+        <result column="RYLX" jdbcType="VARCHAR" property="RYLX"/>
+        <result column="XM" jdbcType="VARCHAR" property="XM"/>
+        <result column="ZW" jdbcType="VARCHAR" property="ZW"/>
+        <result column="XB" jdbcType="VARCHAR" property="XB"/>
+        <result column="MZ" jdbcType="VARCHAR" property="MZ"/>
+        <result column="HJDJZZ" jdbcType="VARCHAR" property="HJDJZZ"/>
+        <result column="ZJLX" jdbcType="VARCHAR" property="ZJLX"/>
+        <result column="ZJH" jdbcType="VARCHAR" property="ZJH"/>
+        <result column="LXDH" jdbcType="VARCHAR" property="LXDH"/>
+        <result column="NL" jdbcType="VARCHAR" property="NL"/>
+        <result column="GZ" jdbcType="VARCHAR" property="GZ"/>
+        <result column="JKZBH" jdbcType="VARCHAR" property="JKZBH"/>
+        <result column="private" jdbcType="VARCHAR" property="privateID"/>
+        <result column="GDDH" jdbcType="VARCHAR" property="GDDH"/>
+        <result column="YDDH" jdbcType="VARCHAR" property="YDDH"/>
+    </resultMap>
+
+    <select id="findProductByCardId" parameterType="java.lang.String" resultMap="ProductionCertificateResultMap">
+        select
+         *
+       from sc_core_sc_xkzmx as xkzmx,sc_core_sc_xkzxx as xkzxx
+       where xkzxx.ID=xkzmx.SCXKZXX_ID
+       <if test="null != _parameter and  _parameter != '' ">
+           and xkzxx.SCXKZBH = #{_parameter}
+       </if>
+    </select>
+    <select id="findProductByName" parameterType="java.lang.String" resultMap="ProductionCertificateResultMap">
+        select
+         *
+       from sc_core_sc_xkzmx as xkzmx,sc_core_sc_xkzxx as xkzxx
+       where xkzxx.ID=xkzmx.SCXKZXX_ID
+        <if test="null != _parameter and _parameter !=''">
+            and xkzxx.SCZMC = #{_parameter}
+        </if>
+        LIMIT 20;
+    </select>
+    <select id="findProductByOrganName" parameterType="java.lang.String" resultMap="ProductionCertificateResultMap">
+      select
+         *
+       from sc_core_sc_xkzmx as xkzmx,sc_core_sc_xkzxx as xkzxx
+       where xkzxx.ID=xkzmx.SCXKZXX_ID
+        <if test="null != _parameter and _parameter !=''">
+            and xkzxx.SSGJBH = #{_parameter}
+        </if>
+        LIMIT 20;
+    </select>
+    <select id="findAllProduct" parameterType="java.lang.String" resultMap="ProductionCertificateResultMap">
+        select
+         *
+       from sc_core_sc_xkzmx as xkzmx,sc_core_sc_xkzxx as xkzxx
+       where xkzxx.ID=xkzmx.SCXKZXX_ID
+        <if test=" null != param1 and null != param2">
+            LIMIT ${param1},${param2};
+        </if>
+    </select>
+
+    <select id="findOperatorByCardId" parameterType="java.lang.String" resultMap="OperatorsInfoResultMap">
+        select
+        *
+        from sp_core_e_spjyxkxx as exx,sp_core_e_ryxx as ryxx
+        where exx.ID=ryxx.SPJYXKXXID
+        and  ryxx.RYEJLX is not null
+        <if test="null !=_parameter and _parameter!=''">
+        and exx.XKZBH = #{_parameter}
+        </if>
+        LIMIT 20;
+    </select>
+    <select id="findOperatorByName" parameterType="java.lang.String" resultMap="OperatorsInfoResultMap">
+        select
+        *
+        from sp_core_e_spjyxkxx as exx,sp_core_e_ryxx as ryxx
+        where exx.ID=ryxx.SPJYXKXXID
+        and  ryxx.RYEJLX is not null
+        <if test="null != _parameter and _parameter !=''">
+            and exx.JYZMC like  '%${_parameter}%'
+        </if>
+      LIMIT 20;
+    </select>
+
+    <select id="findOperatorByOrganName" parameterType="java.lang.String" resultMap="OperatorsInfoResultMap">
+        select
+        *
+        from sp_core_e_spjyxkxx as exx,sp_core_e_ryxx as ryxx
+        where exx.ID=ryxx.SPJYXKXXID
+        and  ryxx.RYEJLX is not null
+        <if test="null != _parameter and _parameter !=''">
+            and exx.RCJDGLJG like '%${_parameter}%'
+        </if>
+        LIMIT 20;
+    </select>
+
+    <select id="findAllOperator" parameterType="java.lang.String" resultMap="OperatorsInfoResultMap">
+        select
+        *
+        from sp_core_e_spjyxkxx as exx,sp_core_e_ryxx as ryxx
+        where exx.ID=ryxx.SPJYXKXXID
+        and  ryxx.RYEJLX is not null
+     <if test=" null != param1 and null != param2">
+        LIMIT ${param1},${param2};
+    </if>
+    </select>
+</mapper>

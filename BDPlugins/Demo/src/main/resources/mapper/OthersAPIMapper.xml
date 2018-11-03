@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zsm.phoenix.dao.OthersAPIDao">
+    <resultMap id="BaseResultMap" type="com.zsm.phoenix.model.ArticleInfo">
+        <id column="article_detail_id" jdbcType="BIGINT" property="article_detail_id"/>
+        <result column="website_group_id" jdbcType="INTEGER" property="website_group_id"/>
+        <result column="author_id" jdbcType="INTEGER" property="author_id"/>
+        <result column="author_raw_id" jdbcType="VARCHAR" property="author_raw_id"/>
+        <result column="website_no" jdbcType="VARCHAR" property="website_no"/>
+        <result column="domain_code" jdbcType="VARCHAR" property="domain_code"/>
+        <result column="article_url" jdbcType="VARCHAR" property="article_url"/>
+        <result column="article_title" property="article_title"/>
+        <result column="article_abstract" property="article_abstract"/>
+        <result column="article_focus_keywords" jdbcType="VARCHAR" property="article_focus_keywords"/>
+        <result column="article_search_keywords" jdbcType="VARCHAR" property="article_search_keywords"/>
+        <result column="article_content_filepath" jdbcType="VARCHAR" property="article_content_filepath"/>
+        <result column="article_content_offset" jdbcType="VARCHAR" property="article_content_offset"/>
+        <result column="article_content_length" jdbcType="INTEGER" property="article_content_length"/>
+        <result column="article_author" jdbcType="VARCHAR" property="article_author"/>
+        <result column="article_source" jdbcType="VARCHAR" property="article_source"/>
+        <result column="province_name" jdbcType="VARCHAR" property="province_name"/>
+        <result column="city_name" jdbcType="VARCHAR" property="city_name"/>
+        <result column="county_name" jdbcType="VARCHAR" property="county_name"/>
+        <result column="article_img_url" jdbcType="VARCHAR" property="article_img_url"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="created_time"/>
+    </resultMap>
+
+    <resultMap id="SampleOrganMap" type="com.zsm.phoenix.model.LimsFinalReport">
+        <result column="SAMPLE_NAME" jdbcType="VARCHAR" property="sample_name"/>
+        <result column="SAMPLE_NO" jdbcType="VARCHAR" property="sample_no"/>
+        <result column="sample_attr" jdbcType="VARCHAR" property="sample_attr"/>
+        <result column="production_date" jdbcType="VARCHAR" property="production_date"/>
+        <result column="RECEIVED_DATE" jdbcType="VARCHAR" property="received_date"/>
+        <result column="SAMPLING_DATE" jdbcType="VARCHAR" property="sampling_date"/>
+        <result column="PRODUCT_NAME" jdbcType="VARCHAR" property="product_name"/>
+        <result column="BATCH_FLAG" jdbcType="VARCHAR" property="batch_flag"/>
+        <result column="ORGANIZATION_NAME" jdbcType="VARCHAR" property="organization_name"/>
+        <result column="report_date" jdbcType="VARCHAR" property="report_date"/>
+        <result column="END_TIME" jdbcType="VARCHAR" property="end_time"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        article_detail_id, website_group_id, author_id, author_raw_id, website_no, domain_code, article_url,
+        article_title, article_abstract, article_focus_keywords, article_search_keywords, article_content_filepath,
+           article_content_offset, article_content_length, article_author, article_source, province_name, city_name,
+            county_name, article_img_url, created_time
+    </sql>
+
+    <select id="findArticleInfo" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sentiments_ArticleData
+        WHERE 1=1 AND
+        <if test="_parameter !=null ">
+            article_title LIKE '%${_parameter}%'
+        </if>
+        LIMIT 20
+    </select>
+
+    <select id="findExamineBySampleName" parameterType="java.lang.String" resultMap="SampleOrganMap">
+        select s.SAMPLE_NAME,s.SAMPLE_NO,s.sample_attr,s.production_date,s.RECEIVED_DATE,s.SAMPLING_DATE,
+        s.PRODUCT_NAME,s.BATCH_FLAG,so.ORGANIZATION_NAME,fp.report_date,so.END_TIME
+        from (finalreport as fp
+        inner join sample as s on s.SAMPLE_ID=fp.SAMPLE_ID)
+        left join service_order as so on so.BATCH_FLAG=s.BATCH_FLAG
+        WHERE 1=1
+        <if test="_parameter != null">
+            and s.SAMPLE_NAME LIKE "%"#{samplename}"%"
+        </if>
+        LIMIT 20
+    </select>
+
+    <select id="findExamineByOrganizationName" parameterType="java.lang.String" resultMap="SampleOrganMap">
+        select s.SAMPLE_NAME,s.SAMPLE_NO,s.sample_attr,s.brand,s.production_date,s.RECEIVED_DATE,
+        s.SAMPLING_DATE,s.PRODUCT_NAME,s.BATCH_FLAG,so.ORGANIZATION_NAME,fp.report_date,so.END_TIME
+        from (sample as s
+        inner join finalreport as fp on fp.ORGANIZATION=s.ORGANIZATION)
+        left join service_order as so on so.ORGANIZATION=s.ORGANIZATION
+        WHERE 1=1
+        <if test="_parameter != null">
+           and so.ORGANIZATION_NAME LIKE "%"#{organizationname}"%"
+        </if>
+        limit 20
+    </select>
+
+</mapper>

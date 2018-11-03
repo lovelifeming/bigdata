@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zsm.phoenix.dao.SupervisionDao">
+    <resultMap id="SupervisionInfoResultMap" type="com.zsm.phoenix.model.SupervisionInfo">
+        <id column="xuuid" jdbcType="VARCHAR" property="xuuid"/>
+        <result column="xxcdbh" jdbcType="VARCHAR" property="xxcdbh"/>
+        <result column="xxcry" jdbcType="VARCHAR" property="xxcry"/>
+        <result column="xxcdw" jdbcType="VARCHAR" property="xxcdw"/>
+        <result column="xxcsj" jdbcType="VARCHAR" property="xxcsj"/>
+        <result column="xzch" jdbcType="VARCHAR" property="xzch"/>
+        <result column="xztmc" jdbcType="VARCHAR" property="xztmc"/>
+        <result column="xxkzh" jdbcType="VARCHAR" property="xxkzh"/>
+        <result column="xfzr" jdbcType="VARCHAR" property="xfzr"/>
+        <result column="xxjycljg1" jdbcType="VARCHAR" property="xxjycljg1"/>
+        <result column="xxjycljg2" jdbcType="VARCHAR" property="xxjycljg2"/>
+        <result column="xfjlj" jdbcType="VARCHAR" property="xfjlj"/>
+        <result column="xqtfjxx" jdbcType="VARCHAR" property="xqtfjxx"/>
+        <result column="xztlx" jdbcType="VARCHAR" property="xztlx"/>
+        <result column="XSM" jdbcType="DATE" property="XSM"/>
+        <result column="b6pfbz" jdbcType="VARCHAR" property="b6pfbz"/>
+        <result column="b6pfnr" jdbcType="VARCHAR" property="b6pfnr"/>
+        <result column="x10fjurl" jdbcType="VARCHAR" property="x10fjurl"/>
+        <result column="x10fz" jdbcType="VARCHAR" property="x10fz"/>
+    </resultMap>
+    <select id="findSupervisionByNum" parameterType="java.lang.String" resultMap="SupervisionInfoResultMap">
+        select
+        *
+       from jg_system_jg_xcjlb as xcjlb,jg_system_jg_xckfjl as xckfjl
+       where xcjlb.xuuid=xckfjl.x10xcuuid
+       <if test="_parameter != null">
+           and xcjlb.xxcdbh = '${_parameter}'
+       </if>
+        group by  xcjlb.xztmc
+    </select>
+    <select id="findSupervisionByName" parameterType="java.lang.String" resultMap="SupervisionInfoResultMap">
+      select
+         *
+       from jg_system_jg_xcjlb as xcjlb,jg_system_jg_xckfjl as xckfjl
+       where xcjlb.xuuid=xckfjl.x10xcuuid
+       <if test="_parameter != null">
+           and xcjlb.xztmc like  '%${_parameter}%'
+       </if>
+        group by  xcjlb.xztmc
+        LIMIT 20;
+    </select>
+    <select id="findAllSupervision"  resultMap="SupervisionInfoResultMap">
+       select
+         *
+       from jg_system_jg_xcjlb as xcjlb,jg_system_jg_xckfjl as xckfjl
+       where xcjlb.xuuid=xckfjl.x10xcuuid
+       group by  xcjlb.xztmc
+       order by xcjlb.xxcsj desc
+        <if test=" null != param1 and null != param2">
+            LIMIT ${param1},${param2};
+        </if>
+    </select>
+</mapper>
