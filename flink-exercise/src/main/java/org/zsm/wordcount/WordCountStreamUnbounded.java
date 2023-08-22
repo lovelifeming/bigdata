@@ -4,6 +4,7 @@ import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -18,7 +19,8 @@ public class WordCountStreamUnbounded {
 
   public static void main(String[] args) throws Exception {
     // 1.创建执行环境
-    StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+//    StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+    StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(new Configuration());
     // 2.读取数据：socket
     DataStreamSource<String> socketTS = env.socketTextStream("hadoop10", 8081);
     // 3.处理数据：切换、转 换、分组、聚合
